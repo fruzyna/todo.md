@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+
 #
 # Objects
 #
@@ -53,6 +55,7 @@ class Category:
 
 config = []
 categories = []
+dateFormat = '%Y-%m-%d'
 
 #
 # Helper functions
@@ -110,7 +113,7 @@ def addCategory(name):
 def printCategoryItems(category):
     print(category.name, 'items')
     print(('-'*(len(category.name)+6)))
-    for item in category.items:
+    for item in sortByDone(sortByDate(category.items, 'created')):
         name = item.name
         if item.getData('done') == 'True':
             striked = ''
@@ -119,3 +122,22 @@ def printCategoryItems(category):
                 striked += '\u0336' + c
             name = striked
         print('-', name)
+
+# Sort done items to the bottom
+def sortByDone(items):
+    done = [i for i in items if i.getData('done') == 'True']
+    undone = [i for i in items if not i.getData('done') == 'True']
+    return undone + done
+
+# Sort items by creation date
+def sortByDate(items, dateKey):
+    items = items.copy()
+    if len(items) == 1:
+        return [items[0]]
+    elif len(items) == 0:
+        return []
+    earliest = 0
+    for i in range(1, len(items)):
+        if dt.strptime(items[i].getData(dateKey), dateFormat) < dt.strptime(items[earliest].getData(dateKey), dateFormat):
+            earliest = i
+    return [items.pop(earliest)] + sortByDate(items, dateKey)

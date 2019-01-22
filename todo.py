@@ -20,7 +20,7 @@ def writeTodo(file):
         f.write('---\n')
 
         for cat in categories:
-            f.write(cat.name + '\n')
+            f.write('###' + cat.name + '\n')
             for item in cat.items:
                 f.write('- ' + item.name + '\n')
                 for d in item.data:
@@ -63,7 +63,7 @@ def readTodo(file):
                         getCategoryByName(currCat).getItemByName(currItem).addData(parts[0].strip(), parts[1].strip())
                     break
                 elif c != ' ':
-                    currCat = line
+                    currCat = line[3:]
                     #print('New category', currCat)
                     addCategory(currCat)
                     break

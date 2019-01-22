@@ -83,21 +83,16 @@ def addItem(params):
     if 2 in params:
         name = params[1]
         category = params[2]
-        date = params['date']
-    else:
-        name = input('Name: ')
-        category = input('Category: ')
-        date = input('Date (Default: none): ')
 
     cat = getCategoryByName(category)
     if cat and not cat.getItemByName(name):
         item = cat.addItem(name)
         # add done and created
         item.addData('done', 'False')
-        item.addData('created', dt.today().strftime('%Y-%m-%d'))
+        item.addData('created', dt.today().strftime(dateFormat))
 
-        if date:
-            item.addData('date', date)
+        if 'date' in params:
+            item.addData('date', params['date'])
     elif not cat:
         print('Category', category, 'not found!')
     else:
