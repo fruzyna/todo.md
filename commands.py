@@ -97,3 +97,7 @@ def addItem(params):
         print('Category', category, 'not found!')
     else:
         print('Item already exists in', category)
+
+# delete complete items
+def deleteDone(params):
+    deleteOld(0)

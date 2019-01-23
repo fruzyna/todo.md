@@ -1,5 +1,4 @@
 import sys, os
-from datetime import datetime as dt
 
 from commands import *
 
@@ -109,8 +108,9 @@ cmds = dict({'list': listItems,
             'cats': listCategories,
             'dets': itemDetails,
             'create': newCategory,
-            'done': markDone,
-            'add': addItem})
+            'add': addItem,
+            'delDone': deleteDone,
+            'done': markDone})
 
 args = sys.argv[1:]
 argDict = {}
@@ -148,6 +148,7 @@ if 'cmd' in argDict:
 
 # call command function
 if mode in cmds:
+    deleteOld(3)
     fn = cmds[mode]
     fn(argDict)
     writeTodo(file)

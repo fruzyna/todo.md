@@ -1,3 +1,4 @@
+import datetime
 from datetime import datetime as dt
 
 #
@@ -141,3 +142,14 @@ def sortByDate(items, dateKey):
         if dt.strptime(items[i].getData(dateKey), dateFormat) < dt.strptime(items[earliest].getData(dateKey), dateFormat):
             earliest = i
     return [items.pop(earliest)] + sortByDate(items, dateKey)
+
+# delete old items
+def deleteOld(days):
+    for category in categories:
+        for item in category.items:
+            due = item.getData('date')
+            if item.getData('done') == 'True' and due:
+                # add X days to the due date
+                deleteOn = dt.strptime(due, dateFormat) + datetime.timedelta(days=days)
+                if deleteOn <= dt.today():
+                    category.items.remove(item)
