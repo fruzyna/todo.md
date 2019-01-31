@@ -146,10 +146,22 @@ def sortByDate(items, dateKey):
 # delete old items
 def deleteOld(days):
     for category in categories:
+        remove = []
         for item in category.items:
             due = item.getData('date')
-            if item.getData('done') == 'True' and due:
-                # add X days to the due date
-                deleteOn = dt.strptime(due, dateFormat) + datetime.timedelta(days=days)
+            created = item.getData('created')
+            # only delete completed items
+            if item.getData('done') == 'True':
+                if due:
+                    # use the due date if it exists
+                    deleteOn = dt.strptime(due, dateFormat)
+                else:
+                    # otherwise use the creation date
+                    deleteOn = dt.strptime(created, dateFormat)
+                # add X days to the date
+                deleteOn += datetime.timedelta(days=days)
                 if deleteOn <= dt.today():
-                    category.items.remove(item)
+                    # queue for deletion
+                    remove.append(item)
+        for item in remove:
+            category.items.remove(item)

@@ -70,7 +70,8 @@ def markDone(params):
             item = category.getItemByName(name)
             if item:
                 item.addData('done', done)
-                print('Set', item.name, 'to', done)
+                doneStr = ['not done', 'done']
+                print('Set', item.name, 'to', doneStr[done == 'True'])
             else:
                 print('Item not found!')
         else:
@@ -101,3 +102,18 @@ def addItem(params):
 # delete complete items
 def deleteDone(params):
     deleteOld(0)
+
+# remove a category
+def removeCategory(params):
+    if 1 in params:
+        catName = params[1]
+        cat = getCategoryByName(catName)
+        if cat:
+            yes = input('Are you sure you want to remove ' + cat.name + '? [yes/NO] ').lower() == 'yes'
+            if yes:
+                categories.remove(cat)
+                print(cat.name, 'removed!')
+        else:
+            print('Category', catName, 'not found!')
+    else:
+        print('Category name required!')

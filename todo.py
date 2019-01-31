@@ -105,11 +105,13 @@ readTodo(file)
 # Check command
 #
 cmds = dict({'list': listItems,
+            'ls': listItems,
             'cats': listCategories,
             'dets': itemDetails,
             'create': newCategory,
             'add': addItem,
             'delDone': deleteDone,
+            'remove': removeCategory,
             'done': markDone})
 
 args = sys.argv[1:]
@@ -148,6 +150,7 @@ if 'cmd' in argDict:
 
 # call command function
 if mode in cmds:
+    # delete any complete items greater than 3 past due
     deleteOld(3)
     fn = cmds[mode]
     fn(argDict)
