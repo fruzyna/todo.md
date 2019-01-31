@@ -19,8 +19,8 @@ def listItems(params):
 # print the details of a given item
 def itemDetails(params):
     if 2 in params:
-        catName = params[1]
-        itemName = params[2]
+        itemName = params[1]
+        catName = params[2]
         category = getCategoryByName(catName)
         if category:
             item = category.getItemByName(itemName)
@@ -101,7 +101,8 @@ def addItem(params):
 
 # delete complete items
 def deleteDone(params):
-    deleteOld(0)
+    count = deleteOld(0)
+    print('Deleted', count, 'items')
 
 # remove a category
 def removeCategory(params):

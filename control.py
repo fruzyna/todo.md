@@ -43,9 +43,10 @@ class Category:
         return item
 
     def getItemByName(self, name):
+        name = name.lower()
         best = None
         for item in self.items:
-            iName = item.name
+            iName = item.name.lower()
             if iName == name:
                 return item
             elif iName.startswith(name) and (not best or len(iName) < len(best.name)):
@@ -145,6 +146,7 @@ def sortByDate(items, dateKey):
 
 # delete old items
 def deleteOld(days):
+    delCount = 0
     for category in categories:
         remove = []
         for item in category.items:
@@ -163,5 +165,7 @@ def deleteOld(days):
                 if deleteOn <= dt.today():
                     # queue for deletion
                     remove.append(item)
+        delCount += len(remove)
         for item in remove:
             category.items.remove(item)
+    return delCount
