@@ -112,7 +112,7 @@ def addCategory(name):
     categories.append(Category(name))
 
 # Prints all the items in a category
-def printCategoryItems(category):
+def printCategoryItems(category, dueOnly):
     print(category.name, 'items')
     print(('-'*(len(category.name)+6)))
     for item in sortByDone(sortByDate(category.items, 'created')):
@@ -123,7 +123,8 @@ def printCategoryItems(category):
             for c in name:
                 striked += '\u0336' + c
             name = striked
-        print('-', name)
+        if not dueOnly or item.getData('date'):
+            print('-', name)
 
 # Sort done items to the bottom
 def sortByDone(items):

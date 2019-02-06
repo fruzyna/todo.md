@@ -4,17 +4,20 @@ from control import *
 
 # Lists the items in a given list or all
 def listItems(params):
+    dueOnly = 'due' in params
     if 1 in params:
         catName = params[1]
         category = getCategoryByName(catName)
         if category:
-            printCategoryItems(category)
+            printCategoryItems(category, dueOnly)
         else:
             print('Category', catName, 'not found!')
     else:
         # if there isn't a list provided print them all
-        for category in categories:
-            printCategoryItems(category)
+        for i, category in enumerate(categories):
+            printCategoryItems(category, dueOnly)
+            if i != (len(categories) - 1):
+                print()
 
 # print the details of a given item
 def itemDetails(params):
