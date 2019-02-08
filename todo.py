@@ -101,18 +101,32 @@ if not os.path.exists(file):
 
 readTodo(file)
 
+def helpCmd(params):
+    print('Commands')
+    print('--------')
+    for key in cmds:
+        tabs = '\t'
+        if len(key) < 8:
+            tabs += '\t'
+        print(key + tabs + cmds[key][1])
+
 #
 # Check command
 #
-cmds = dict({'list': listItems,
-            'ls': listItems,
-            'cats': listCategories,
-            'dets': itemDetails,
-            'create': newCategory,
-            'add': addItem,
-            'delDone': deleteDone,
-            'remove': removeCategory,
-            'done': markDone})
+cmds = dict({
+    'add': [addItem, 'Add a new item to a category.'],
+    'categories': [listCategories, 'List available categories.'],
+    'cats': [listCategories, 'Abbreviated version of the categories command.'],
+    'create': [newCategory, 'Create a new category.'],
+    'delDone': [deleteDone, 'Delete all completed items.'],
+    'details': [itemDetails, 'Provide details on a given item.'],
+    'dets': [itemDetails, 'Abbreviated version of the details command.'],
+    'done': [markDone, 'Mark/unmark an item as done.'],
+    'help': [helpCmd, 'List all available commands.'],
+    'list': [listItems, 'List all items or items in a particular list.'],
+    'ls': [listItems, 'Abbreviated version of the list command.'],
+    'remove': [removeCategory, 'Remove a category.']
+})
 
 args = sys.argv[1:]
 argDict = {}
@@ -152,7 +166,7 @@ if 'cmd' in argDict:
 if mode in cmds:
     # delete any complete items greater than 3 past due
     deleteOld(3)
-    fn = cmds[mode]
+    fn = cmds[mode][0]
     fn(argDict)
     writeTodo(file)
 else:

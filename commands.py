@@ -14,10 +14,12 @@ def listItems(params):
             print('Category', catName, 'not found!')
     else:
         # if there isn't a list provided print them all
+        empty = 'empty' in params
         for i, category in enumerate(categories):
-            printCategoryItems(category, dueOnly)
-            if i != (len(categories) - 1):
-                print()
+            if empty or len(category.items) > 0:
+                printCategoryItems(category, dueOnly)
+                if i != (len(categories) - 1):
+                    print()
 
 # print the details of a given item
 def itemDetails(params):

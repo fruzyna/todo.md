@@ -113,7 +113,7 @@ def addCategory(name):
 
 # Prints all the items in a category
 def printCategoryItems(category, dueOnly):
-    print(category.name, 'items')
+    print(boldName, 'items')
     print(('-'*(len(category.name)+6)))
     for item in sortByDone(sortByDate(category.items, 'created')):
         name = item.name
