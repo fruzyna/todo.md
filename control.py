@@ -55,6 +55,12 @@ class Category:
             return best
         return None
 
+    def empty(self):
+        for item in self.items:
+            if item.getData('done') == 'False':
+                return False
+        return True
+
 config = []
 categories = []
 dateFormat = '%Y-%m-%d'
@@ -113,7 +119,7 @@ def addCategory(name):
 
 # Prints all the items in a category
 def printCategoryItems(category, dueOnly):
-    print(boldName, 'items')
+    print(category.name, 'items')
     print(('-'*(len(category.name)+6)))
     for item in sortByDone(sortByDate(category.items, 'created')):
         name = item.name

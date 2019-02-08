@@ -16,7 +16,7 @@ def listItems(params):
         # if there isn't a list provided print them all
         empty = 'empty' in params
         for i, category in enumerate(categories):
-            if empty or len(category.items) > 0:
+            if empty or not category.empty():
                 printCategoryItems(category, dueOnly)
                 if i != (len(categories) - 1):
                     print()
