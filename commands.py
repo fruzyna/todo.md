@@ -5,21 +5,45 @@ from control import *
 # Lists the items in a given list or all
 def listItems(params):
     dueOnly = 'due' in params
+    hideDone = not 'hideDone' in params
+    showDate = 'date' in params or dueOnly
     if 1 in params:
         catName = params[1]
         category = getCategoryByName(catName)
         if category:
-            printCategoryItems(category, dueOnly)
+            printCategoryItems(category.name, category.getItems(hideDone=hideDone, dueOnly=dueOnly), showDate=showDate)
         else:
             print('Category', catName, 'not found!')
     else:
         # if there isn't a list provided print them all
         empty = 'empty' in params
         for i, category in enumerate(categories):
-            if empty or not category.empty():
-                printCategoryItems(category, dueOnly)
-                if i != (len(categories) - 1):
-                    print()
+            success = printCategoryItems(category.name, category.getItems(hideDone=hideDone, dueOnly=dueOnly), showDate=showDate, showEmpty=empty)
+            if i != (len(categories) - 1) and success:
+                print()
+
+# Lists all the items
+def listAllItems(params):
+    dueOnly = 'due' in params
+    priority = 'priority' in params
+    items = []
+    for category in categories:
+        for item in category.items:
+            if not dueOnly or item.getData('date'):
+                items.append(item)
+    if priority:
+        sorted = sortByPriority(items)
+    else:
+        sorted = sortByDate(items, 'created')
+    for item in sortByDone(items):
+        name = item.name
+        if item.getData('done') == 'True':
+            striked = ''
+            # strikes through complete items
+            for c in name:
+                striked += '\u0336' + c
+            name = striked
+        print('-', name)
 
 # print the details of a given item
 def itemDetails(params):
@@ -90,19 +114,25 @@ def addItem(params):
         name = params[1]
         category = params[2]
 
-    cat = getCategoryByName(category)
-    if cat and not cat.getItemByName(name):
-        item = cat.addItem(name)
-        # add done and created
-        item.addData('done', 'False')
-        item.addData('created', dt.today().strftime(dateFormat))
+        cat = getCategoryByName(category)
+        if cat and not cat.getItemByName(name):
+            item = cat.addItem(name)
+            # add done and created
+            item.addData('done', 'False')
+            item.addData('created', dt.today().strftime(dateFormat))
 
-        if 'date' in params:
-            item.addData('date', params['date'])
-    elif not cat:
-        print('Category', category, 'not found!')
+            if 'date' in params:
+                item.addData('date', params['date'])
+            if 'priority' in params:
+                item.addData('priority', params['priority'])
+            else:
+                item.addData('priority', '0')
+        elif not cat:
+            print('Category', category, 'not found!')
+        else:
+            print('Item already exists in', category)
     else:
-        print('Item already exists in', category)
+        print('Item name and category parameters required!')
 
 # delete complete items
 def deleteDone(params):

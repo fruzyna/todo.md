@@ -123,7 +123,8 @@ cmds = dict({
     'dets': [itemDetails, 'Abbreviated version of the details command.'],
     'done': [markDone, 'Mark/unmark an item as done.'],
     'help': [helpCmd, 'List all available commands.'],
-    'list': [listItems, 'List all items or items in a particular list.'],
+    'list': [listItems, 'List all items by category or items in a particular category.'],
+    'list-all': [listAllItems, 'List all items without categories.'],
     'ls': [listItems, 'Abbreviated version of the list command.'],
     'remove': [removeCategory, 'Remove a category.']
 })

@@ -55,6 +55,15 @@ class Category:
             return best
         return None
 
+    def getItems(self, hideDone=False, dueOnly=False):
+        if not hideDone and not dueOnly:
+            return self.items
+        items = []
+        for item in self.items:
+            if (not hideDone or item.getData('done') == 'False') and (not dueOnly or item.getData('date')):
+                items.append(item)
+        return items
+
     def empty(self):
         for item in self.items:
             if item.getData('done') == 'False':
@@ -118,19 +127,24 @@ def addCategory(name):
     categories.append(Category(name))
 
 # Prints all the items in a category
-def printCategoryItems(category, dueOnly):
-    print(category.name, 'items')
-    print(('-'*(len(category.name)+6)))
-    for item in sortByDone(sortByDate(category.items, 'created')):
-        name = item.name
-        if item.getData('done') == 'True':
-            striked = ''
-            # strikes through complete items
-            for c in name:
-                striked += '\u0336' + c
-            name = striked
-        if not dueOnly or item.getData('date'):
+def printCategoryItems(name, items, showDate=False, showEmpty=False):
+    if len(items) > 0 or showEmpty:
+        print(name, 'items')
+        print(('-'*(len(name)+6)))
+        for item in sortByDone(sortByDate(items, 'created')):
+            name = item.name
+            if item.getData('done') == 'True':
+                striked = ''
+                # strikes through complete items
+                for c in name:
+                    striked += '\u0336' + c
+                name = striked
             print('-', name)
+            date = item.getData('date')
+            if showDate and date:
+                print('  -', date)
+        return True
+    return False
 
 # Sort done items to the bottom
 def sortByDone(items):
@@ -150,6 +164,19 @@ def sortByDate(items, dateKey):
         if dt.strptime(items[i].getData(dateKey), dateFormat) < dt.strptime(items[earliest].getData(dateKey), dateFormat):
             earliest = i
     return [items.pop(earliest)] + sortByDate(items, dateKey)
+
+# Sort items by priority
+def sortByPriority(items):
+    items = items.copy()
+    if len(items) == 1:
+        return [items[0]]
+    elif len(items) == 0:
+        return []
+    highest = 0
+    for i in range(1, len(items)):
+        if int(items[i].getData('priority')) > int(items[highest].getData('priority')):
+            highest = i
+    return [items.pop(highest)] + sortByPriority(items)
 
 # delete old items
 def deleteOld(days):
