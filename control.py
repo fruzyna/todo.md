@@ -173,9 +173,12 @@ def sortByPriority(items):
     elif len(items) == 0:
         return []
     highest = 0
-    for i in range(1, len(items)):
-        if int(items[i].getData('priority')) > int(items[highest].getData('priority')):
+    highVal = 0
+    for i in range(0, len(items)):
+        val = items[i].getData('priority')
+        if val and int(val) > highVal:
             highest = i
+            highVal = int(val)
     return [items.pop(highest)] + sortByPriority(items)
 
 # delete old items

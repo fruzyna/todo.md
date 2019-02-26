@@ -127,7 +127,8 @@ cmds = dict({
     'list': [listItems, 'List all items by category or items in a particular category.'],
     'list-all': [listAllItems, 'List all items without categories.'],
     'ls': [listItems, 'Abbreviated version of the list command.'],
-    'remove': [removeCategory, 'Remove a category.']
+    'remove': [removeCategory, 'Remove a category.'],
+    'setPriority': [setPriority, 'Set a priority of an item.']
 })
 
 args = sys.argv[1:]

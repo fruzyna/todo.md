@@ -27,15 +27,16 @@ def listAllItems(params):
     dueOnly = 'due' in params
     priority = 'priority' in params
     items = []
+    # get all items from all lists
     for category in categories:
-        for item in category.items:
-            if not dueOnly or item.getData('date'):
-                items.append(item)
+        items = items + category.getItems(dueOnly=dueOnly)
+    # sort by priority or date
     if priority:
         sorted = sortByPriority(items)
     else:
         sorted = sortByDate(items, 'created')
-    for item in sortByDone(items):
+    # sort by done then print
+    for item in sortByDone(sorted):
         name = item.name
         if item.getData('done') == 'True':
             striked = ''
@@ -83,6 +84,25 @@ def changeDate(params):
                     print('No date exists')
                 date = input('New date: ')
                 item.addData('date', date)
+            else:
+                print('Item', itemName, 'not found')
+        else:
+            print('Category', catName, 'not found!')
+    else:
+        print('Item name and category are required arguments!')
+
+# change the priority of an item
+def setPriority(params):
+    if 2 in params:
+        itemName = params[1]
+        catName = params[2]
+        priority = params[3]
+        category = getCategoryByName(catName)
+        if category:
+            item = category.getItemByName(itemName)
+            if item:
+                item.addData('priority', priority)
+                print('Set priority of', item.name, 'to', priority)
             else:
                 print('Item', itemName, 'not found')
         else:
