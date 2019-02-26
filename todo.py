@@ -117,6 +117,7 @@ cmds = dict({
     'add': [addItem, 'Add a new item to a category.'],
     'categories': [listCategories, 'List available categories.'],
     'cats': [listCategories, 'Abbreviated version of the categories command.'],
+    'chDate': [changeDate, 'Provide a new date for an item.'],
     'create': [newCategory, 'Create a new category.'],
     'delDone': [deleteDone, 'Delete all completed items.'],
     'details': [itemDetails, 'Provide details on a given item.'],

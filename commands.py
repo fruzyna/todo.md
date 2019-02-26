@@ -65,6 +65,30 @@ def itemDetails(params):
             print('Category', catName, 'not found!')
     else:
         print('Item name and category are required arguments!')
+
+# change the date of an item
+def changeDate(params):
+    if 2 in params:
+        itemName = params[1]
+        catName = params[2]
+        category = getCategoryByName(catName)
+        if category:
+            item = category.getItemByName(itemName)
+            if item:
+                print(item.name)
+                date = item.getData('date')
+                if date:
+                    print('Current date: ' + date)
+                else:
+                    print('No date exists')
+                date = input('New date: ')
+                item.addData('date', date)
+            else:
+                print('Item', itemName, 'not found')
+        else:
+            print('Category', catName, 'not found!')
+    else:
+        print('Item name and category are required arguments!')
     
 # print a list of all categories
 def listCategories(params):
