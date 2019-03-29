@@ -131,7 +131,7 @@ def printCategoryItems(name, items, showDate=False, showEmpty=False):
     if len(items) > 0 or showEmpty:
         print(name, 'items')
         print(('-'*(len(name)+6)))
-        for item in sortByDone(sortByDate(items, 'created')):
+        for item in sortByDone(sortByDate(items, 'date')):
             name = item.name
             if item.getData('done') == 'True':
                 striked = ''
@@ -161,8 +161,10 @@ def sortByDate(items, dateKey):
         return []
     earliest = 0
     for i in range(1, len(items)):
-        if dt.strptime(items[i].getData(dateKey), dateFormat) < dt.strptime(items[earliest].getData(dateKey), dateFormat):
+        if not items[earliest].getData(dateKey) and items[i].getData(dateKey):
             earliest = i
+        elif items[i].getData(dateKey) and dt.strptime(items[i].getData(dateKey), dateFormat) < dt.strptime(items[earliest].getData(dateKey), dateFormat):
+                earliest = i
     return [items.pop(earliest)] + sortByDate(items, dateKey)
 
 # Sort items by priority

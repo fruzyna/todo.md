@@ -26,6 +26,7 @@ def listItems(params):
 def listAllItems(params):
     dueOnly = 'due' in params
     priority = 'priority' in params
+    showDate = 'date' in params or dueOnly
     items = []
     # get all items from all lists
     for category in categories:
@@ -34,7 +35,7 @@ def listAllItems(params):
     if priority:
         sorted = sortByPriority(items)
     else:
-        sorted = sortByDate(items, 'created')
+        sorted = sortByDate(items, 'date')
     # sort by done then print
     for item in sortByDone(sorted):
         name = item.name
@@ -45,6 +46,9 @@ def listAllItems(params):
                 striked += '\u0336' + c
             name = striked
         print('-', name)
+        date = item.getData('date')
+        if showDate and date:
+            print('  -', date)
 
 # print the details of a given item
 def itemDetails(params):
