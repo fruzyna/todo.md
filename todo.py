@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, subprocess
 
 from commands import *
 
@@ -110,6 +110,12 @@ def helpCmd(params):
             tabs += '\t'
         print(key + tabs + cmds[key][1])
 
+def edit(params):
+    cmd = 'vim'
+    if 1 in params:
+        cmd = params[i]
+    subprocess.run([cmd, file])
+
 #
 # Check command
 #
@@ -123,6 +129,7 @@ cmds = dict({
     'details': [itemDetails, 'Provide details on a given item.'],
     'dets': [itemDetails, 'Abbreviated version of the details command.'],
     'done': [markDone, 'Mark/unmark an item as done.'],
+    'edit': [edit, 'Open todo.md in Vim.'],
     'help': [helpCmd, 'List all available commands.'],
     'list': [listItems, 'List all items by category or items in a particular category.'],
     'list-all': [listAllItems, 'List all items without categories.'],
