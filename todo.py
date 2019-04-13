@@ -55,7 +55,7 @@ def readTodo(file):
                     if spaces == 0:
                         currItem = line[2:]
                         #print('New item', currItem, 'to', currCat)
-                        getCategoryByName(currCat).addItem(currItem)
+                        getCategoryByName(currCat).addItem(currItem, currCat)
                     elif spaces == 2:
                         parts = line[4:].split(':')
                         #print('New data', key, value, 'to', currItem, 'in', currCat)
@@ -135,6 +135,7 @@ cmds = dict({
     'list-all': [listAllItems, 'List all items without categories.'],
     'ls': [listItems, 'Abbreviated version of the list command.'],
     'remove': [removeCategory, 'Remove a category.'],
+    'search': [searchAllItems, 'Search for all items containing a given word.'],
     'setPriority': [setPriority, 'Set a priority of an item.']
 })
 

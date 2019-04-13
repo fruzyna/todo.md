@@ -13,9 +13,10 @@ class Configuration:
 
 # Item object
 class Item:
-    def __init__(self, name):
+    def __init__(self, name, category):
         self.name = name
         self.data = []
+        self.category = category
 
     def addData(self, key, value):
         config = Configuration(key, value)
@@ -37,8 +38,8 @@ class Category:
         self.name = name
         self.items = []
 
-    def addItem(self, name):
-        item = Item(name)
+    def addItem(self, name, category):
+        item = Item(name, category)
         self.items.append(item)
         return item
 
@@ -208,3 +209,13 @@ def deleteOld(days):
         for item in remove:
             category.items.remove(item)
     return delCount
+
+# search for a keyword all items
+def searchAll(word):
+    results = []
+    for category in categories:
+        for item in category.items:
+            words = item.name.upper().split()
+            if word.upper() in words:
+                results.append(item)
+    return results

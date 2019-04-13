@@ -38,7 +38,7 @@ def listAllItems(params):
         sorted = sortByDate(items, 'date')
     # sort by done then print
     for item in sortByDone(sorted):
-        name = item.name
+        name = item.name + ' [' + item.category + ']'
         if item.getData('done') == 'True':
             striked = ''
             # strikes through complete items
@@ -49,6 +49,34 @@ def listAllItems(params):
         date = item.getData('date')
         if showDate and date:
             print('  -', date)
+
+# Lists all the items with a given word
+def searchAllItems(params):
+    if 1 in params:
+        word = params[1]
+        priority = 'priority' in params
+        showDate = 'date' in params
+        items = searchAll(word)
+        # sort by priority or date
+        if priority:
+            sorted = sortByPriority(items)
+        else:
+            sorted = sortByDate(items, 'date')
+        # sort by done then print
+        for item in sortByDone(sorted):
+            name = item.name + ' [' + item.category + ']'
+            if item.getData('done') == 'True':
+                striked = ''
+                # strikes through complete items
+                for c in name:
+                    striked += '\u0336' + c
+                name = striked
+            print('-', name)
+            date = item.getData('date')
+            if showDate and date:
+                print('  -', date)
+    else:
+        print('Search term required!')
 
 # print the details of a given item
 def itemDetails(params):
@@ -164,7 +192,7 @@ def addItem(params):
 
         cat = getCategoryByName(category)
         if cat and not cat.getItemByName(name):
-            item = cat.addItem(name)
+            item = cat.addItem(name, cat.name)
             # add done and created
             item.addData('done', 'False')
             item.addData('created', dt.today().strftime(dateFormat))
